@@ -1,0 +1,527 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de gestion gestion des apprenants",
+        "version": "1.0.0",
+        "description": "API pour gérer la gestion des apprenants"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Serveur Local"
+        }
+    ],
+    "paths": {
+        "/user": {
+            "get": {
+                "summary": "Récupérer l'utilisateur authentifié",
+                "tags": ["User"],
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informations de l'utilisateur authentifié"
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Créer un nouvel utilisateur",
+                "tags": ["User"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Utilisateur créé avec succès"
+                    },
+                    "400": {
+                        "description": "Données invalides"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "Se connecter",
+                "tags": ["Auth"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie"
+                    },
+                    "401": {
+                        "description": "Identifiants incorrects"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "summary": "Se déconnecter",
+                "tags": ["Auth"],
+                "responses": {
+                    "204": {
+                        "description": "Déconnexion réussie"
+                    }
+                }
+            }
+        },
+        "/change-password": {
+            "post": {
+                "summary": "Changer le mot de passe",
+                "tags": ["User"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChangePassword"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mot de passe modifié avec succès"
+                    },
+                    "400": {
+                        "description": "Données invalides"
+                    }
+                }
+            }
+        },
+        "/v1/users/{id}": {
+            "patch": {
+                "summary": "Mettre à jour un utilisateur",
+                "tags": ["User"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID de l'utilisateur"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur mis à jour"
+                    },
+                    "404": {
+                        "description": "Utilisateur non trouvé"
+                    }
+                }
+            }
+        },
+        "/v1/users": {
+            "get": {
+                "summary": "Lister tous les utilisateurs",
+                "tags": ["User"],
+                "responses": {
+                    "200": {
+                        "description": "Liste des utilisateurs"
+                    }
+                }
+            }
+        },
+        "/apprenants": {
+            "post": {
+                "summary": "Créer un nouvel apprenant",
+                "tags": ["Apprenants"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Apprenant"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Apprenant créé avec succès"
+                    }
+                }
+            }
+        },
+        "/v1/apprenants/import": {
+            "post": {
+                "summary": "Importer des apprenants",
+                "tags": ["Apprenants"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ImportApprenant"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Importation réussie"
+                    }
+                }
+            }
+        },
+        "/v1/apprenants": {
+            "get": {
+                "summary": "Récupérer les apprenants de la promotion active",
+                "tags": ["Apprenants"],
+                "responses": {
+                    "200": {
+                        "description": "Liste des apprenants"
+                    }
+                }
+            }
+        },
+        "/referentiels": {
+            "get": {
+                "summary": "Lister tous les référentiels",
+                "tags": ["Referentiel"],
+                "responses": {
+                    "200": {
+                        "description": "Liste des référentiels"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Créer un nouveau référentiel",
+                "tags": ["Referentiel"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Referentiel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Référentiel créé avec succès"
+                    }
+                }
+            }
+        },
+        "/referentiels/{id}": {
+            "get": {
+                "summary": "Afficher les détails d'un référentiel",
+                "tags": ["Referentiel"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID du référentiel"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails du référentiel"
+                    },
+                    "404": {
+                        "description": "Référentiel non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Mettre à jour un référentiel",
+                "tags": ["Referentiel"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Referentiel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Référentiel mis à jour"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Supprimer un référentiel",
+                "tags": ["Referentiel"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID du référentiel"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Référentiel supprimé avec succès"
+                    }
+                }
+            }
+        },
+        "/referentiels/{id}/modules": {
+            "get": {
+                "summary": "Lister les modules d'un référentiel",
+                "tags": ["Referentiel"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID du référentiel"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des modules"
+                    }
+                }
+            }
+        },
+        "/promotions": {
+            "get": {
+                "summary": "Lister toutes les promotions",
+                "tags": ["Promotion"],
+                "responses": {
+                    "200": {
+                        "description": "Liste des promotions"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Créer une nouvelle promotion",
+                "tags": ["Promotion"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Promotion"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Promotion créée avec succès"
+                    }
+                }
+            }
+        },
+        "/promotions/{id}": {
+            "get": {
+                "summary": "Afficher les détails d'une promotion",
+                "tags": ["Promotion"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID de la promotion"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de la promotion"
+                    },
+                    "404": {
+                        "description": "Promotion non trouvée"
+                    }
+                }
+            }
+        },
+        "/promotions/{id}/apprenants": {
+            "get": {
+                "summary": "Lister les apprenants d'une promotion",
+                "tags": ["Promotion"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID de la promotion"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des apprenants"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "required": ["name", "email", "password"]
+            },
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "required": ["email", "password"]
+            },
+            "ChangePassword": {
+                "type": "object",
+                "properties": {
+                    "current_password": {
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "new_password": {
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "new_password_confirmation": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "required": ["current_password", "new_password", "new_password_confirmation"]
+            },
+            "Apprenant": {
+                "type": "object",
+                "properties": {
+                    "prenom": {
+                        "type": "string"
+                    },
+                    "nom": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "telephone": {
+                        "type": "string"
+                    }
+                },
+                "required": ["prenom", "nom", "email", "telephone"]
+            },
+            "ImportApprenant": {
+                "type": "object",
+                "properties": {
+                    "apprenants": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Apprenant"
+                        }
+                    }
+                }
+            },
+            "Referentiel": {
+                "type": "object",
+                "properties": {
+                    "nom": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                },
+                "required": ["nom"]
+            },
+            "Promotion": {
+                "type": "object",
+                "properties": {
+                    "nom": {
+                        "type": "string"
+                    },
+                    "date_debut": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "date_fin": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                },
+                "required": ["nom", "date_debut", "date_fin"]
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
